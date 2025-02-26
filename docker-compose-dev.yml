@@ -1,8 +1,13 @@
 services:
   api:
     build: .
+    depends_on:
+      - postgres # wait for postgres to be ready before starting the api
     ports:
       - 8000:8000  # redirect the port <port on localhost>:<port on container>
+    volumes:
+      - ./:/usr/src/app:ro # mount the current directory to /usr/src/app in the container
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     env_file:
       - ./.env
     environment:
