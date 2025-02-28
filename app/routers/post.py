@@ -9,6 +9,7 @@ router = APIRouter(prefix="/posts", tags=["posts"])
 @router.get("/", response_model=list[schemas.PostOut])
 def get_all_posts(
     db: Session = Depends(database.get_db),
+    current_user: int = Depends(oauth2.get_current_user),
     limit: int = 10,
     skip: int = 0,
     search: str = "",
@@ -17,6 +18,7 @@ def get_all_posts(
         db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
         .outerjoin(models.Vote, models.Vote.post_id == models.Post.id)
         .filter(models.Post.title.contains(search))
+        .filter(models.Post.owner_id == current_user.id)
         .group_by(models.Post.id)
         .limit(limit)
         .offset(skip)
@@ -27,12 +29,17 @@ def get_all_posts(
 
 
 @router.get("/{post_id}", response_model=schemas.PostOut)
-def get_post(post_id: int, db: Session = Depends(database.get_db)):
+def get_post(
+    post_id: int,
+    db: Session = Depends(database.get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+):
 
     post = (
         db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
         .outerjoin(models.Vote, models.Vote.post_id == models.Post.id)
         .group_by(models.Post.id)
+        .filter(models.Post.owner_id == current_user.id)
         .filter(models.Post.id == post_id)
         .first()
     )
