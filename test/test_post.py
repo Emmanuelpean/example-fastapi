@@ -27,6 +27,11 @@ def test_unauthorised_user_get_one_post(client, test_posts: List[models.Post]):
     assert response.status_code == 401
 
 
+def test_wrong_user_get_one_post(authorized_client2, test_posts):
+    response = authorized_client2.get(f"/posts/{test_posts[0].id}")
+    assert response.status_code == 401
+
+
 def test_get_one_post_not_exist(authorized_client, test_posts: List[models.Post]):
     response = authorized_client.get(f"/posts/100")
     assert response.status_code == 404
