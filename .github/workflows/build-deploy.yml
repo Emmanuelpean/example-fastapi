@@ -79,17 +79,15 @@ jobs:
       - name: pulling git repo
         uses: actions/checkout@v2
 
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
       - name: Authenticate with Railway
-        uses: railwayapp/railway-action@1.2.0
-        with:
-          railway_token: ${{ secrets.RAILWAY_ACCESS_TOKEN }}
+        run: railway login --token ${{ secrets.RAILWAY_ACCESS_TOKEN }}
 
       - name: Deploy to Railway
-        uses: bervProject/railway-deploy@0.1.2-beta
-        with:
-          service: zealous-nourishment # Replace this with your actual Railway service name
-          railway_token: ${{ secrets.RAILWAY_ACCESS_TOKEN }}
-
+        run: railway up
+      
       # - name: deploy to ubuntu server
       #   uses: appleboy/ssh-action@master
       #   with:
