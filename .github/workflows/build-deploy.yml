@@ -79,10 +79,9 @@ jobs:
       - name: pulling git repo
         uses: actions/checkout@v2
       - name: deploying to Railway
-        uses: emmanuelpean//railway-deploy@main # This is the action
+        uses: bervProject/railway-deploy@0.1.2-beta # This is the action
         with:
-          railway_token: ${{secrets.RAILWAY_ACCESS_TOKEN}}
-          service: "zealous-nourishment"
+          service: ${{secrets.RAILWAY_ACCESS_TOKEN}}
 
       # - name: deploy to ubuntu server
       #   uses: appleboy/ssh-action@master
