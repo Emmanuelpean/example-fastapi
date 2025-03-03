@@ -85,8 +85,7 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_ACCESS_TOKEN }}
-        run: railway up
-      
+        run: railway up --service ${{ secrets.RAILWAY_SERVICE_NAME }}
       # - name: deploy to ubuntu server
       #   uses: appleboy/ssh-action@master
       #   with:
