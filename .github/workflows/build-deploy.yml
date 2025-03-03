@@ -82,10 +82,9 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Authenticate with Railway
-        run: railway login --token ${{ secrets.RAILWAY_ACCESS_TOKEN }}
-
       - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_ACCESS_TOKEN }}
         run: railway up
       
       # - name: deploy to ubuntu server
